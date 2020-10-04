@@ -1,0 +1,7 @@
+fn fib(age) {
+  if age < 18 {
+    return false
+  } else {
+    return true
+  }
+}

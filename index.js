@@ -2,8 +2,20 @@ const Lexer = require("./lexer.js")
 const Parser = require("./parser.js")
 const Machine = require("./interpreter.js")
 
-let lexer = new Lexer('1 + 2 * 3')
+
+const code = `
+{
+    val a = 5
+    val b = a * 3
+    print(b)
+    print(a)
+}
+print(a)`
+
+let lexer = new Lexer(code)
+
 let parser = new Parser(lexer)
+
 let machine = new Machine()
 
-console.log(machine.run(parser.expr()))
+machine.run(parser.parse())
