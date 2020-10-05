@@ -5,6 +5,10 @@
  * chamada de função nós criamos um CallFrame e botamos no fim da CallStack
  */
 
+const {
+  NotFoundVarError,
+} = require('../errors.js');
+
 class CallFrame {
   constructor() {
     this.frames = [{}];
@@ -21,7 +25,7 @@ class CallFrame {
 
   declVar(name, type, value) {
     if (this.frames[this.frames.length - 1][name] !== undefined) {
-      throw new Error(`Variavel '${name}' já foi declarada nesse escopo`);
+      throw new NotFoundVarError(name);
     } else {
       this.frames[this.frames.length - 1][name] = { type, value };
     }
