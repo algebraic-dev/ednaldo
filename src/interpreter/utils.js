@@ -14,7 +14,6 @@ function valToNumber(val, name) {
       return val;
     case 'Bool':
       return { type: 'Number', value: +val.value };
-    case 'String':
     case 'Array':
       return { type: 'Number', value: val.value.length };
     default:

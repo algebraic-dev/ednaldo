@@ -29,14 +29,14 @@ function repl() {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    prompt: '>',
+    prompt: '> ',
   });
 
   if (process.stdin.isTTY) process.stdin.setRawMode(true);
 
   const machine = new Machine();
 
-  process.stdout.write("Repl de Edvaldo use ':quit' to quit!\n");
+  process.stdout.write("Repl de Ednaldo use ':quit' to quit!\n\n");
 
   rl.prompt();
   rl.on('line', (line) => {

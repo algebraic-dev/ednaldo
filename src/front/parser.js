@@ -31,7 +31,7 @@ class Parser {
       this.eat('(');
       const args = [];
       while (this.actual.type !== ')' && this.actual.type !== 'EOF') {
-        args.push(this.logicalOperators());
+        args.push(this.parseValues());
         if (this.actual.type === ',') {
           this.eat(',');
         } else {
@@ -50,7 +50,7 @@ class Parser {
     switch (this.actual.type) {
       case '(': {
         this.eat('(');
-        const expr = this.expr();
+        const expr = this.parseValues();
         this.eat(')');
         return expr;
       }
@@ -59,12 +59,24 @@ class Parser {
         const expr = this.factor();
         return { type: 'Unary', op: '-', value: expr };
       }
+      case '[': {
+        this.advance();
+        const values = [];
+        while (this.actual.type !== ']' && this.actual.type !== 'EOF') {
+          values.push(this.parseValues());
+        }
+        this.eat(']');
+        return { type: 'Array', values };
+      }
       case 'True':
         this.advance();
         return { type: 'Bool', value: true };
       case 'False':
         this.advance();
         return { type: 'Bool', value: false };
+      case 'Nil':
+        this.advance();
+        return { type: 'Nil' };
       case 'Identifier':
         return this.parseName();
       case 'String':
@@ -106,7 +118,7 @@ class Parser {
 
   condition() {
     let left = this.expr();
-    if (this.actual.type === '<' || this.actual.type === '>' || this.actual.type === '>=' || this.actual.type === '<=' || this.actual.type === '==') {
+    if (this.actual.type === '<' || this.actual.type === '>' || this.actual.type === '>=' || this.actual.type === '<=' || this.actual.type === '==' || this.actual.type === '!=') {
       const { type } = this.actual;
       this.advance();
       left = { left, type, right: this.expr() };
@@ -124,6 +136,10 @@ class Parser {
     return left;
   }
 
+  parseValues() {
+    return this.logicalOperators();
+  }
+
   // Statements
 
   parseVariableDeclaration() {
@@ -131,13 +147,13 @@ class Parser {
     const name = this.eat('Identifier').value;
     this.eat('=');
 
-    const expr = this.expr();
+    const expr = this.parseValues();
     return { type: 'VarDecl', name, value: expr };
   }
 
   parseVarSet(name) {
     this.eat('=');
-    const expr = this.expr();
+    const expr = this.parseValues();
     return { type: 'VarSet', name: name.value, value: expr };
   }
 
@@ -218,7 +234,7 @@ class Parser {
       case '{':
         return this.parseCompound();
       default: {
-        const expr = this.logicalOperators();
+        const expr = this.parseValues();
         if (expr.type === 'Identifier' && this.actual.type === '=') {
           return this.parseVarSet(expr);
         }

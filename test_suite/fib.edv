@@ -6,4 +6,4 @@ fn fib(n) do
     end
 end
 
-println(fib(10))
+println("O resultado do fib é", fib(10))
