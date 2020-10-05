@@ -1,4 +1,4 @@
-const { NotFinishedStringError } = require('../errors.js');
+const { NotFinishedStringError, UnrecognizedError } = require('../errors.js');
 
 const {isDigit, isValidIdentifierCharacter, isValidStartOfIdentifierCharacter, checkIdType} = require('./validation.js')
 
@@ -32,8 +32,8 @@ class Lexer {
     }
 
     // Remove os characters considerados inuteis
-    if (['\t', ' ', '\n'].includes(this.input[this.pos])) {
-      while (['\t', ' ', '\n'].includes(this.input[this.pos]) && this.input[this.pos] !== undefined) {
+    if (['\t', ' ', '\n','\r'].includes(this.input[this.pos])) {
+      while (['\t', ' ', '\n','\r'].includes(this.input[this.pos]) && this.input[this.pos] !== undefined) {
         if (this.input[this.pos] === '\n') {
           this.relPos.line += 1;
         }
@@ -53,6 +53,7 @@ class Lexer {
       case '{':
       case '}':
       case '.':
+      case ',':
         this.pos += 1;
         return {
           type: this.input[this.pos - 1],
@@ -102,7 +103,7 @@ class Lexer {
       return { type: checkIdType(value), value, pos: this.relPos };
     }
 
-    return { type: 'ERRORED', value: this.input[this.pos], pos: this.relPos };
+    throw new UnrecognizedError(this.input[this.pos], this.relPos);
   }
 }
 

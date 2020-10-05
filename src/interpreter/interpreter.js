@@ -1,43 +1,14 @@
 const CallFrame = require('./callframe.js');
+const builtIn = require('./builtin.js');
+const { checkType, valToNumber } = require('./utils.js');
 const { NotImplementedError, DivisionByZeroError, TypeError } = require('../errors.js');
-
-function checkType(node, op, type){
-  if(node.type != type){
-    throw new TypeError(type, node.type, op)
-  } else {
-    return node
-  }
-}
-
-function valToNumber(val, name){
-  switch(value.type){
-    case 'Number':
-      return val
-    case 'Bool':
-      return {type: 'Number', value: +val.value};
-    case 'String':
-    case 'Array':
-      return {type: 'Number', value: val.value.length}
-    default:
-      throw new TypeError('Number', val.type, name)
-  }
-}
-
-function valToBool(val, name){
-  switch(val.type){
-    case 'Number':
-      return {type: 'Number', value: !!val.value};
-    case 'Bool':
-      return bool
-    default:
-      throw new TypeError('Bool', val.type, name)
-
-  }
-}
+const StandardIO = require('./standardio.js')
 
 class Interpreter {
-  constructor() {
+  constructor(io = StandardIO) {
     this.callStack = [new CallFrame()];
+    this.builtIn = builtIn 
+    this.io = io
   }
 
   // Variable manipulation funtions 
@@ -87,11 +58,12 @@ class Interpreter {
   visitCall(node) {
     const { name } = node;
     const args = node.args.map((a) => this.visit(a));
-    if (name === 'print') {
-      console.log(...args);
+    if (this.builtIn[name]) {
+      this.builtIn[name].run(this, ...args);
     } else {
       const value = this.findVar(name);
-      if (value === undefined) {
+
+      if (value === undefined || value === null) {
         throw new Error(`Função ${name} não encontrada!`);
       }
       if (value.type !== 'Function') {
@@ -156,8 +128,8 @@ class Interpreter {
   }
 
   visitBinaryComparisonOperation(node, op) {
-    const x = valToBool(this.visit(node.left), op);
-    const y = valToBool(this.visit(node.right), op);
+    const x = valToNumber(this.visit(node.left), op);
+    const y = valToNumber(this.visit(node.right), op);
     return { type: 'Bool', value: op(x, y) };
   }
 
@@ -182,11 +154,11 @@ class Interpreter {
         if (y.value === 0) throw new DivisionByZeroError(y.pos);
         return x.value / y.value;
       },'/');
-      case '>': return this.visitBinaryMathOperation(node, (x, y) => x.value > y.value);
-      case '<': return this.visitBinaryMathOperation(node, (x, y) => x.value < y.value);
-      case '>=': return this.visitBinaryMathOperation(node, (x, y) => x.value >= y.value);
-      case '<=': return this.visitBinaryMathOperation(node, (x, y) => x.value <= y.value);
-      case '==': return this.visitBinaryMathOperation(node, (x, y) => x.value === y.value);
+      case '>': return this.visitBinaryComparisonOperation(node, (x, y) => x.value > y.value);
+      case '<': return this.visitBinaryComparisonOperation(node, (x, y) => x.value < y.value);
+      case '>=': return this.visitBinaryComparisonOperation(node, (x, y) => x.value >= y.value);
+      case '<=': return this.visitBinaryComparisonOperation(node, (x, y) => x.value <= y.value);
+      case '==': return this.visitBinaryComparisonOperation(node, (x, y) => x.value === y.value);
       default:
         throw new NotImplementedError(node);
     }

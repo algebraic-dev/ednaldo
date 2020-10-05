@@ -34,6 +34,21 @@ class TypeError {
   }
 }
 
+class IncorrectArgNumberError {
+  constructor(expected, got, func) {
+    this.func = func
+    this.expected = expected
+    this.got = got
+  } 
+}
+
+class UnrecognizedError {
+  constructor(unrecognizable, pos){
+    this.unrecognizable = unrecognizable;
+    this.pos = pos
+  }
+}
+
 module.exports = {
-  SyntaxError, NotFinishedStringError, NotImplementedError, DivisionByZeroError, TypeError
+  SyntaxError, NotFinishedStringError, NotImplementedError, DivisionByZeroError, TypeError, IncorrectArgNumberError, UnrecognizedError
 };
