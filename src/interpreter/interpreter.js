@@ -1,17 +1,26 @@
 const CallFrame = require('./callframe.js');
 const builtIn = require('./builtin.js');
 const { checkType, valToNumber } = require('./utils.js');
-const { NotImplementedError, DivisionByZeroError, TypeError } = require('../errors.js');
-const StandardIO = require('./standardio.js')
+const StandardIO = require('./standardio.js');
+
+// Classes de erros
+const {
+  NotImplementedError,
+  DivisionByZeroError,
+  NotFoundVariableError,
+  NotFoundFunctionError,
+  NotAFunctionError,
+  IncorrectArgNumberError,
+} = require('../errors.js');
 
 class Interpreter {
   constructor(io = StandardIO) {
     this.callStack = [new CallFrame()];
-    this.builtIn = builtIn 
-    this.io = io
+    this.builtIn = builtIn;
+    this.io = io;
   }
 
-  // Variable manipulation funtions 
+  // Variable manipulation funtions
   findVar(name) {
     if (this.callStack[this.callStack.length - 1].findVar(name) !== undefined) {
       return this.callStack[this.callStack.length - 1].findVar(name);
@@ -25,7 +34,7 @@ class Interpreter {
   setVar(name, type, value) {
     if (!this.callStack[this.callStack.length - 1].setVarAndCheckExistence(name, type, value)) {
       if (!this.callStack[0].setVarAndCheckExistence(name, type, value)) {
-        throw new Error(`Variavel '${name}' não existe`);
+        throw new NotFoundVariableError(name);
       }
     }
   }
@@ -64,15 +73,15 @@ class Interpreter {
       const value = this.findVar(name);
 
       if (value === undefined || value === null) {
-        throw new Error(`Função ${name} não encontrada!`);
+        throw new NotFoundFunctionError(`Função ${name} não encontrada!`);
       }
       if (value.type !== 'Function') {
-        throw new Error(`O valor encontrado em ${value}`);
+        throw new NotAFunctionError(value);
       }
       const func = value.value;
 
       if (func.args.length !== args.length) {
-        throw new Error(`Opo numero errado de argumentos, voce deu ${args.length} mas precisa de ${value.args.length}`);
+        throw new IncorrectArgNumberError(args.length, value.args.length);
       }
 
       this.callStack.push(new CallFrame());
@@ -92,17 +101,18 @@ class Interpreter {
 
   visitId(node) {
     const value = this.findVar(node.value);
-    if (value === undefined) {
-      throw new Error(`Variável ${node.value} não encontrada!`);
+    if (value === undefined || value === null) {
+      throw new NotFoundVariableError(node.value);
     }
     return value.value;
   }
 
   visitProgram(node) {
+    let val = null;
     for (let i = 0; i < node.statements.length; i += 1) {
-      this.visit(node.statements[i]);
+      val = this.visit(node.statements[i]);
     }
-    return null;
+    return val;
   }
 
   visitIf(node) {
@@ -113,17 +123,17 @@ class Interpreter {
       return this.visit(node.elseCompound);
     }
 
-    return {type: 'Null', value: 'Null'};
+    return { type: 'Null', value: 'Null' };
   }
 
   visitFunction(node) {
     this.declVar(node.name, 'Function', node);
-    return {type: 'Null', value: 'Null'};
+    return { type: 'Null', value: 'Null' };
   }
 
   visitBinaryMathOperation(node, op, name) {
-    const x = checkType(this.visit(node.left), name,'Number');
-    const y = checkType(this.visit(node.right), name,'Number');
+    const x = checkType(this.visit(node.left), name, 'Number');
+    const y = checkType(this.visit(node.right), name, 'Number');
     return { type: 'Number', value: op(x, y) };
   }
 
@@ -143,17 +153,17 @@ class Interpreter {
       case 'VarDecl': return this.visitVarDecl(node);
       case 'Function': return this.visitFunction(node);
       case 'If': return this.visitIf(node);
-      case 'Bool': 
+      case 'Bool':
       case 'String': return node;
       case 'Number': return { type: 'Number', value: parseInt(node.value, 10) };
-      case '+': return this.visitBinaryMathOperation(node, (x, y) => x.value + y.value,'+');
-      case '-': return this.visitBinaryMathOperation(node, (x, y) => x.value - y.value,'-');
-      case '*': return this.visitBinaryMathOperation(node, (x, y) => x.value * y.value,'*');
-      case '^': return this.visitBinaryMathOperation(node, (x, y) => x.value ** y.value,'^');
+      case '+': return this.visitBinaryMathOperation(node, (x, y) => x.value + y.value, '+');
+      case '-': return this.visitBinaryMathOperation(node, (x, y) => x.value - y.value, '-');
+      case '*': return this.visitBinaryMathOperation(node, (x, y) => x.value * y.value, '*');
+      case '^': return this.visitBinaryMathOperation(node, (x, y) => x.value ** y.value, '^');
       case '/': return this.visitBinaryMathOperation(node, (x, y) => {
         if (y.value === 0) throw new DivisionByZeroError(y.pos);
         return x.value / y.value;
-      },'/');
+      }, '/');
       case '>': return this.visitBinaryComparisonOperation(node, (x, y) => x.value > y.value);
       case '<': return this.visitBinaryComparisonOperation(node, (x, y) => x.value < y.value);
       case '>=': return this.visitBinaryComparisonOperation(node, (x, y) => x.value >= y.value);

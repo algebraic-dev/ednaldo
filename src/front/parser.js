@@ -33,10 +33,9 @@ class Parser {
       while (this.actual.type !== ')' && this.actual.type !== 'EOF') {
         args.push(this.logicalOperators());
         if (this.actual.type === ',') {
-          
-          this.eat(',')
+          this.eat(',');
         } else {
-          break
+          break;
         }
       }
       this.eat(')');
@@ -48,7 +47,7 @@ class Parser {
   // Math
 
   factor() {
-    switch(this.actual.type){
+    switch (this.actual.type) {
       case '(': {
         this.eat('(');
         const expr = this.expr();
@@ -61,16 +60,16 @@ class Parser {
         return { type: 'Unary', op: '-', value: expr };
       }
       case 'True':
-        this.advance()
-        return {type: 'Bool', value: true}
+        this.advance();
+        return { type: 'Bool', value: true };
       case 'False':
-        this.advance()
-        return {type: 'Bool', value: false}
-      case 'Identifier': 
+        this.advance();
+        return { type: 'Bool', value: false };
+      case 'Identifier':
         return this.parseName();
       case 'String':
         return this.eat('String');
-      default:     
+      default:
         return this.eat('Number');
     }
   }
@@ -163,8 +162,8 @@ class Parser {
   parseIf() {
     this.eat('If');
     const condition = this.logicalOperators();
-    this.eat('Do')
-    const compound = this.parseUnrestrictedCompound(['End','Else','Elif'])
+    this.eat('Do');
+    const compound = this.parseUnrestrictedCompound(['End', 'Else', 'Elif']);
     const elseifs = [];
     let elseCompound;
 
@@ -180,7 +179,7 @@ class Parser {
       elseCompound = this.parseUnrestrictedCompound(['End']);
     }
 
-    this.eat('End')
+    this.eat('End');
 
     return {
       type: 'If', condition, compound, elseifs, elseCompound,
@@ -228,18 +227,17 @@ class Parser {
     }
   }
 
-  firstClassStructs(){
+  firstClassStructs() {
     if (this.actual.type === 'Fn') {
       return this.parseFn();
-    } else {
-      return this.statement();
     }
+    return this.statement();
   }
 
   parse() {
     const statements = [];
     while (this.actual.type !== 'EOF') {
-      statements.push(this.firstClassStructs())
+      statements.push(this.firstClassStructs());
     }
     this.eat('EOF');
     return { type: 'Program', statements };
