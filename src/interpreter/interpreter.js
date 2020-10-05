@@ -1,5 +1,5 @@
 const CallFrame = require('./callframe.js');
-const { NotImplementedError, DivisionByZeroError } = require('./errors.js');
+const { NotImplementedError, DivisionByZeroError } = require('../errors.js');
 
 class Interpreter {
   constructor() {
