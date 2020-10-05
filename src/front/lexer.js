@@ -1,5 +1,5 @@
-const KEYWORDS = ['val', 'fn', 'if', 'else', 'const', 'and', 'or', 'elif'];
-const { NotFinishedStringError } = require('./errors.js');
+const KEYWORDS = ['val', 'fn', 'if', 'else', 'const', 'and', 'or', 'elif','do','end'];
+const { NotFinishedStringError } = require('../errors.js');
 
 // As funções abaixo são uteis para a validação de chars e
 // strings que vão ser utilizadas pelo lexer para criar os

@@ -1,4 +1,4 @@
-const { SyntaxError } = require('./errors.js');
+const { SyntaxError } = require('../errors.js');
 
 // O parser pega o stream de lemexas do lexer e tenta
 // Correlacionar eles. Caso não seja possivel correlacionar ele
@@ -125,19 +125,28 @@ class Parser {
   }
 
   parseCompound() {
-    this.eat('->');
+    this.eat('Do');
     const code = [];
-    while (this.actual.type !== '.' && this.actual.type !== 'EOF') {
+    while (this.actual.type !== 'End' && this.actual.type !== 'EOF') {
       code.push(this.statement());
     }
-    this.eat('.');
+    this.eat('End');
+    return { type: 'Compound', code };
+  }
+
+  parseUnrestrictedCompound(terminals) {
+    const code = [];
+    while (!terminals.includes(this.actual.type) && this.actual.type !== 'EOF') {
+      code.push(this.statement());
+    }
     return { type: 'Compound', code };
   }
 
   parseIf() {
     this.eat('If');
     const condition = this.logicalOperators();
-    const compound = this.parseCompound();
+    this.eat('Do')
+    const compound = this.parseUnrestrictedCompound(['End','Else','Elif'])
     const elseifs = [];
     let elseCompound;
 
@@ -150,8 +159,11 @@ class Parser {
 
     if (this.actual.type === 'Else') {
       this.eat('Else');
-      elseCompound = this.parseCompound();
+      elseCompound = this.parseUnrestrictedCompound(['End']);
     }
+
+    this.eat('End')
+
     return {
       type: 'If', condition, compound, elseifs, elseCompound,
     };

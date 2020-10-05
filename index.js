@@ -1,13 +1,15 @@
-const Lexer = require('./src/lexer.js');
-const Parser = require('./src/parser.js');
-const Machine = require('./src/interpreter.js');
+const Lexer = require('./src/front/lexer.js');
+const Parser = require('./src/front/parser.js');
+const Machine = require('./src/interpreter/interpreter.js');
 
 const code = `
-fn fib(n) ->
-    if n < 2 -> 
-        n.
-    else ->
-        fib(n-1) + fib(n-2)..
+fn fib(n) do
+    if n < 2 do 
+        n
+    else
+        fib(n-1) + fib(n-2)
+    end
+end
 
 print(fib(10))
 `;
