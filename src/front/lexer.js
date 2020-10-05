@@ -1,33 +1,6 @@
-const KEYWORDS = ['val', 'fn', 'if', 'else', 'const', 'and', 'or', 'elif','do','end'];
 const { NotFinishedStringError } = require('../errors.js');
 
-// As funções abaixo são uteis para a validação de chars e
-// strings que vão ser utilizadas pelo lexer para criar os
-// lexemas.
-
-function isDigit(char) {
-  return char >= '0' && char <= '9';
-}
-
-function isOperator(char) {
-  return ['+', '-', '*', '/', '(', ')', '[', ']', '{', '}', '>', '<', '=', '.', ',', '|', '^', '&', '@', '#', '?', '!', ':'].includes(char);
-}
-
-function isUseless(char) {
-  return [' ', '\t', '\n', '\r'].includes(char);
-}
-
-function isValidStartOfIdentifierCharacter(char) {
-  return !isUseless(char) && !isDigit(char) && !isOperator(char) && char !== undefined;
-}
-
-function isValidIdentifierCharacter(char) {
-  return !isUseless(char) && !isOperator(char) && char !== undefined;
-}
-
-function checkIdType(value) {
-  return KEYWORDS.includes(value) ? value[0].toUpperCase() + value.substring(1, value.length) : 'Identifier';
-}
+const {isDigit, isValidIdentifierCharacter, isValidStartOfIdentifierCharacter, checkIdType} = require('./validation.js')
 
 /**
  * Essa classe é o inicio da interpretação, ela irá pegar o código fonte
@@ -106,12 +79,11 @@ class Lexer {
       if (this.input[this.pos] === undefined) {
         throw new NotFinishedStringError(this.relPos);
       }
-      this.pos -= 1;
-      return { type: 'String', value: this.input.substring(start, this.pos), pos: this.relPos };
+      this.pos++
+      return { type: 'String', value: this.input.substring(start+1, this.pos-1), pos: this.relPos };
     }
 
-    // Checa se há um numero valido (floats não são considerados numeros
-    // válidos)
+    // Checa se há um numero valido (floats não são considerados numeros válidos por enquanto)
     if (isDigit(this.input[this.pos])) {
       const start = this.pos;
       while (isDigit(this.input[this.pos])) {

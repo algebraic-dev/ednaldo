@@ -4,7 +4,7 @@
 <p align="center">Linguagem de uso geral, revisão do erlang que só cavalos usam</p>
 
 ## :alembic: Porque? 
-Seu pai seu pai 
+Essa linguagem é feita para programação de editores de video para os video clipes do Ednaldo Pereira.
 
 ## :heavy_check_mark: Para fazer:
 - [x] Lang

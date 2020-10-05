@@ -26,6 +26,14 @@ class DivisionByZeroError {
   }
 }
 
+class TypeError {
+  constructor(expected, got, operation){
+    this.expected = expected
+    this.got = got
+    this.operation = operation
+  }
+}
+
 module.exports = {
-  SyntaxError, NotFinishedStringError, NotImplementedError, DivisionByZeroError,
+  SyntaxError, NotFinishedStringError, NotImplementedError, DivisionByZeroError, TypeError
 };

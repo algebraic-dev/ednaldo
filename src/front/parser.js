@@ -32,6 +32,11 @@ class Parser {
       const args = [];
       while (this.actual.type !== ')' && this.actual.type !== 'EOF') {
         args.push(this.expr());
+        if (this.actual.type === ',') {
+          this.eat(',')
+        } else {
+          break
+        }
       }
       this.eat(')');
       return { type: 'Call', name: name.value, args };
@@ -42,19 +47,31 @@ class Parser {
   // Math
 
   factor() {
-    if (this.actual.type === '(') {
-      this.eat('(');
-      const expr = this.expr();
-      this.eat(')');
-      return expr;
-    } if (this.actual.type === '-') {
-      this.eat('-');
-      const expr = this.factor();
-      return { type: 'Unary', op: '-', value: expr };
-    } if (this.actual.type === 'Identifier') {
-      return this.parseName();
+    switch(this.actual.type){
+      case '(': {
+        this.eat('(');
+        const expr = this.expr();
+        this.eat(')');
+        return expr;
+      }
+      case '-': {
+        this.eat('-');
+        const expr = this.factor();
+        return { type: 'Unary', op: '-', value: expr };
+      }
+      case 'True':
+        this.advance()
+        return {type: 'Bool', value: true}
+      case 'False':
+        this.advance()
+        return {type: 'Bool', value: false}
+      case 'Identifier': 
+        return this.parseName();
+      case 'String':
+        return this.eat('String');
+      default:     
+        return this.eat('Number');
     }
-    return this.eat('Number');
   }
 
   powered() {
@@ -210,14 +227,18 @@ class Parser {
     }
   }
 
+  firstClassStructs(){
+    if (this.actual.type === 'Fn') {
+      return this.parseFn();
+    } else {
+      return this.statement();
+    }
+  }
+
   parse() {
     const statements = [];
     while (this.actual.type !== 'EOF') {
-      if (this.actual.type === 'Fn') {
-        statements.push(this.parseFn());
-      } else {
-        statements.push(this.statement());
-      }
+      statements.push(this.firstClassStructs())
     }
     this.eat('EOF');
     return { type: 'Program', statements };
