@@ -1,7 +1,7 @@
 const { NotFinishedStringError, UnrecognizedError } = require('../errors.js');
 
 const {
-  isDigit, isValidIdentifierCharacter, isValidStartOfIdentifierCharacter, checkIdType,
+  isDigit, isValidIdentifierCharacter, isValidStartOfIdentifierCharacter, checkIdType, isUseless
 } = require('./validation.js');
 
 /**
@@ -34,8 +34,8 @@ class Lexer {
     }
 
     // Remove os characters considerados inuteis
-    if (['\t', ' ', '\n', '\r'].includes(this.input[this.pos])) {
-      while (['\t', ' ', '\n', '\r'].includes(this.input[this.pos]) && this.input[this.pos] !== undefined) {
+    if (isUseless(this.input[this.pos])) {
+      while (isUseless(this.input[this.pos]) && this.input[this.pos] !== undefined) {
         if (this.input[this.pos] === '\n') {
           this.relPos.line += 1;
         }
