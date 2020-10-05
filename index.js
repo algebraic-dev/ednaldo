@@ -44,18 +44,19 @@ async function repl() {
   for await (const line of rl) {
     if (line.trim() === ':quit') {
       rl.close();
-    } else {
-      const lexer = new Lexer(line.trim());
-      const parser = new Parser(lexer);
-      try {
-        const val = machine.run(parser.parse());
-        if (val !== null) {
-          machine.builtIn.println.run(machine, val);
-        }
-      } catch (err) {
-        process.stdout.write(`${util.inspect(err, false, 3, true)}\n`);
-      }
+      return;
     }
+    const lexer = new Lexer(line.trim());
+    const parser = new Parser(lexer);
+    try {
+      const val = machine.run(parser.parse());
+      if (val !== null) {
+        machine.builtIn.println.run(machine, val);
+      }
+    } catch (err) {
+      process.stdout.write(`${util.inspect(err, false, 3, true)}\n`);
+    }
+
     rl.prompt();
   }
 }
