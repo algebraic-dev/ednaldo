@@ -1,7 +1,7 @@
 const CallFrame = require('./callframe.js');
 const { NotImplementedError, DivisionByZeroError } = require('./errors.js');
 
-class Machine {
+class Interpreter {
   constructor() {
     this.callStack = [new CallFrame()];
   }
@@ -160,4 +160,4 @@ class Machine {
   }
 }
 
-module.exports = Machine;
+module.exports = Interpreter;
