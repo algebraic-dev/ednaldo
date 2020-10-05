@@ -1,6 +1,8 @@
 const { NotFinishedStringError, UnrecognizedError } = require('../errors.js');
 
-const {isDigit, isValidIdentifierCharacter, isValidStartOfIdentifierCharacter, checkIdType} = require('./validation.js')
+const {
+  isDigit, isValidIdentifierCharacter, isValidStartOfIdentifierCharacter, checkIdType,
+} = require('./validation.js');
 
 /**
  * Essa classe é o inicio da interpretação, ela irá pegar o código fonte
@@ -32,8 +34,8 @@ class Lexer {
     }
 
     // Remove os characters considerados inuteis
-    if (['\t', ' ', '\n','\r'].includes(this.input[this.pos])) {
-      while (['\t', ' ', '\n','\r'].includes(this.input[this.pos]) && this.input[this.pos] !== undefined) {
+    if (['\t', ' ', '\n', '\r'].includes(this.input[this.pos])) {
+      while (['\t', ' ', '\n', '\r'].includes(this.input[this.pos]) && this.input[this.pos] !== undefined) {
         if (this.input[this.pos] === '\n') {
           this.relPos.line += 1;
         }
@@ -80,8 +82,8 @@ class Lexer {
       if (this.input[this.pos] === undefined) {
         throw new NotFinishedStringError(this.relPos);
       }
-      this.pos++
-      return { type: 'String', value: this.input.substring(start+1, this.pos-1), pos: this.relPos };
+      this.pos += 1;
+      return { type: 'String', value: this.input.substring(start + 1, this.pos - 1), pos: this.relPos };
     }
 
     // Checa se há um numero valido (floats não são considerados numeros válidos por enquanto)
