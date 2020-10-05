@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 const fs = require('fs');
 const readline = require('readline');
 const util = require('util');
@@ -25,7 +26,7 @@ function executeFile(file) {
   }
 }
 
-function repl() {
+async function repl() {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -39,7 +40,8 @@ function repl() {
   process.stdout.write("Repl de Ednaldo use ':quit' to quit!\n\n");
 
   rl.prompt();
-  rl.on('line', (line) => {
+
+  for await (const line of rl) {
     if (line.trim() === ':quit') {
       rl.close();
     } else {
@@ -55,7 +57,7 @@ function repl() {
       }
     }
     rl.prompt();
-  });
+  }
 }
 
 if (process.argv.length > 2) {

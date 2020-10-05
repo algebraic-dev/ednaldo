@@ -67,36 +67,36 @@ class Interpreter {
   visitCall(node) {
     const { name } = node;
     const args = node.args.map((a) => this.visit(a));
+
     if (this.builtIn[name]) {
-      this.builtIn[name].run(this, ...args);
-    } else {
-      const value = this.findVar(name);
-
-      if (value === undefined || value === null) {
-        throw new NotFoundFunctionError(`Função ${name} não encontrada!`);
-      }
-      if (value.type !== 'Function') {
-        throw new NotAFunctionError(value);
-      }
-      const func = value.value;
-
-      if (func.args.length !== args.length) {
-        throw new IncorrectArgNumberError(args.length, value.args.length);
-      }
-
-      this.callStack.push(new CallFrame());
-      for (let i = 0; i < func.args.length; i += 1) {
-        this.declVar(func.args[i], 'Number', args[i]);
-      }
-      let val = null;
-      for (let i = 0; i < func.compound.code.length; i += 1) {
-        val = this.visit(func.compound.code[i]);
-      }
-
-      this.callStack.pop();
-      return val;
+      return this.builtIn[name].run(this, ...args);
     }
-    return null;
+
+    const value = this.findVar(name);
+
+    if (value === undefined || value === null) {
+      throw new NotFoundFunctionError(`Função ${name} não encontrada!`);
+    }
+    if (value.type !== 'Function') {
+      throw new NotAFunctionError(value);
+    }
+    const func = value.value;
+
+    if (func.args.length !== args.length) {
+      throw new IncorrectArgNumberError(args.length, value.args.length);
+    }
+
+    this.callStack.push(new CallFrame());
+    for (let i = 0; i < func.args.length; i += 1) {
+      this.declVar(func.args[i], 'Number', args[i]);
+    }
+    let val = null;
+    for (let i = 0; i < func.compound.code.length; i += 1) {
+      val = this.visit(func.compound.code[i]);
+    }
+
+    this.callStack.pop();
+    return val;
   }
 
   visitId(node) {
