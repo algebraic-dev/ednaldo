@@ -1,21 +1,23 @@
-const Lexer = require("./lexer.js")
-const Parser = require("./parser.js")
-const Machine = require("./interpreter.js")
-
+const Lexer = require('./src/lexer.js');
+const Parser = require('./src/parser.js');
+const Machine = require('./src/interpreter.js');
 
 const code = `
-{
-    val a = 5
-    val b = a * 3
-    print(b)
-    print(a)
+fn fib(n) ->
+    if n < 2 -> 
+        n.
+    else ->
+        fib(n-1) + fib(n-2)..
+
+print(fib(10))
+`;
+
+const lexer = new Lexer(code);
+const parser = new Parser(lexer);
+const machine = new Machine();
+
+try {
+  machine.run(parser.parse());
+} catch (err) {
+  console.log(err);
 }
-print(a)`
-
-let lexer = new Lexer(code)
-
-let parser = new Parser(lexer)
-
-let machine = new Machine()
-
-machine.run(parser.parse())
