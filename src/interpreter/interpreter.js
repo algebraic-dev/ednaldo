@@ -1,13 +1,13 @@
 const CallFrame = require('./callframe.js');
 const builtIn = require('./builtin.js');
-const { checkType, valToNumber } = require('./utils.js');
+const { valToNumber, valToBool } = require('./utils.js');
 const StandardIO = require('./standardio.js');
 
 // Classes de erros
 const {
   NotImplementedError,
   DivisionByZeroError,
-  NotFoundVariableError,
+  NotFoundVarError,
   NotFoundFunctionError,
   NotAFunctionError,
   IncorrectArgNumberError,
@@ -34,7 +34,7 @@ class Interpreter {
   setVar(name, type, value) {
     if (!this.callStack[this.callStack.length - 1].setVarAndCheckExistence(name, type, value)) {
       if (!this.callStack[0].setVarAndCheckExistence(name, type, value)) {
-        throw new NotFoundVariableError(name);
+        throw new NotFoundVarError(name);
       }
     }
   }
@@ -102,7 +102,7 @@ class Interpreter {
   visitId(node) {
     const value = this.findVar(node.value);
     if (value === undefined || value === null) {
-      throw new NotFoundVariableError(node.value);
+      throw new NotFoundVarError(node.value, node.pos);
     }
     return value.value;
   }
@@ -123,17 +123,37 @@ class Interpreter {
       return this.visit(node.elseCompound);
     }
 
-    return { type: 'Null', value: 'Null' };
+    return { type: 'Nil', value: 'Nil' };
   }
 
   visitFunction(node) {
     this.declVar(node.name, 'Function', node);
-    return { type: 'Null', value: 'Null' };
+    return { type: 'Nil', value: 'Nil' };
+  }
+
+  visitOpSum(node) {
+    const x = this.visit(node.left);
+    const y = this.visit(node.right);
+    if (x.type === y.type && x.type === 'String') {
+      return { type: 'String', value: x.value + y.value };
+    }
+    const xval = valToNumber(x, '+', 'Number').value;
+    const yval = valToNumber(y, '+', 'Number').value;
+    return { type: 'Number', value: xval + yval };
+  }
+
+  visitEqual(node) {
+    const x = this.visit(node.left);
+    const y = this.visit(node.right);
+    if (x.type === y.type && x.value === y.value) {
+      return { type: 'Bool', value: true };
+    }
+    return { type: 'Bool', value: false };
   }
 
   visitBinaryMathOperation(node, op, name) {
-    const x = checkType(this.visit(node.left), name, 'Number');
-    const y = checkType(this.visit(node.right), name, 'Number');
+    const x = valToNumber(this.visit(node.left), name, 'Number');
+    const y = valToNumber(this.visit(node.right), name, 'Number');
     return { type: 'Number', value: op(x, y) };
   }
 
@@ -141,6 +161,19 @@ class Interpreter {
     const x = valToNumber(this.visit(node.left), op);
     const y = valToNumber(this.visit(node.right), op);
     return { type: 'Bool', value: op(x, y) };
+  }
+
+  visitUnary(node) {
+    switch (node.op) {
+      case '-':
+        return { type: 'Number', value: -valToNumber(this.visit(node.value), '+').value };
+      case '+':
+        return { type: 'Number', value: +valToNumber(this.visit(node.value), '+').value };
+      case '!':
+        return { type: 'Number', value: !valToBool(this.visit(node.value), '+').value };
+      default:
+        throw new NotImplementedError(node);
+    }
   }
 
   visit(node) {
@@ -156,7 +189,7 @@ class Interpreter {
       case 'Bool':
       case 'String': return node;
       case 'Number': return { type: 'Number', value: parseInt(node.value, 10) };
-      case '+': return this.visitBinaryMathOperation(node, (x, y) => x.value + y.value, '+');
+      case '+': return this.visitOpSum(node);
       case '-': return this.visitBinaryMathOperation(node, (x, y) => x.value - y.value, '-');
       case '*': return this.visitBinaryMathOperation(node, (x, y) => x.value * y.value, '*');
       case '^': return this.visitBinaryMathOperation(node, (x, y) => x.value ** y.value, '^');
@@ -168,7 +201,11 @@ class Interpreter {
       case '<': return this.visitBinaryComparisonOperation(node, (x, y) => x.value < y.value);
       case '>=': return this.visitBinaryComparisonOperation(node, (x, y) => x.value >= y.value);
       case '<=': return this.visitBinaryComparisonOperation(node, (x, y) => x.value <= y.value);
-      case '==': return this.visitBinaryComparisonOperation(node, (x, y) => x.value === y.value);
+      case '==': return this.visitEqual(node);
+      case '!=': return { type: 'Bool', value: !this.visitEqual(node).value };
+      case 'Nil': return node;
+      case 'Unary': return this.visitUnary(node);
+      case 'Array': return { type: 'Array', values: node.values.map((a) => this.visit(a)) };
       default:
         throw new NotImplementedError(node);
     }

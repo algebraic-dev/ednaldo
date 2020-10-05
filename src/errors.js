@@ -54,7 +54,7 @@ class UnrecognizedError {
   }
 }
 
-class NotFoundVariableError {
+class NotFoundVarError {
   constructor(name, pos) {
     this.name = name;
     this.pos = pos;
@@ -83,7 +83,7 @@ module.exports = {
   TypeError,
   IncorrectArgNumberError,
   UnrecognizedError,
-  NotFoundVariableError,
+  NotFoundVarError,
   NotAFunctionError,
   NotFoundFunctionError,
 };

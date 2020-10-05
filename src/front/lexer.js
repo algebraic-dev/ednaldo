@@ -51,11 +51,12 @@ class Lexer {
       case '^':
       case '(':
       case ')':
-      case '=':
       case '{':
       case '}':
       case '.':
       case ',':
+      case '[':
+      case ']':
         this.pos += 1;
         return {
           type: this.input[this.pos - 1],
@@ -68,6 +69,10 @@ class Lexer {
         return this.doubleChar('<', '=', '<=');
       case '>':
         return this.doubleChar('>', '=', '>=');
+      case '=':
+        return this.doubleChar('=', '=', '==');
+      case '!':
+        return this.doubleChar('!', '=', '!=');
       default:
         break;
     }
