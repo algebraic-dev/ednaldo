@@ -50,7 +50,8 @@ class Interpreter {
   }
 
   visitVarSet(node) {
-    this.setVar(node.name, this.visit(node.value));
+    const val = this.visit(node.value);
+    this.setVar(node.name, val.type, val.value);
     return null;
   }
 

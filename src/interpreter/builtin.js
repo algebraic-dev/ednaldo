@@ -1,4 +1,6 @@
+/* eslint-disable no-nested-ternary */
 const { IncorrectArgNumberError } = require('../errors.js');
+const { checkType } = require('./utils.js');
 
 function formatInterpreterType(node) {
   switch (node.type) {
@@ -43,10 +45,17 @@ module.exports = {
       }
     },
   },
-  registerNode: {
+  append: {
     run(machine, ...args) {
-      if (args.length !== 2) throw new IncorrectArgNumberError(2, args.length, 'registerNode');
-      return { type: 'String', value: args[0].value.toString() };
+      if (args.length !== 2) throw new IncorrectArgNumberError(2, args.length, 'append');
+      checkType(args[0], 'append', 'Array');
+      return { type: 'Array', value: args[0].value.concat(args[1]) };
+    },
+  },
+  len: {
+    run(machine, ...args) {
+      if (args.length !== 1) throw new IncorrectArgNumberError(2, args.length, 'len');
+      return { type: 'Number', value: args[0].value ? (args[0].value.length ? args[0].value.length : 0) : 0 };
     },
   },
 };
