@@ -1,0 +1,9 @@
+fn fib(n) do
+    if n < 2 do
+        n
+    else 
+        fib(n-1) + fib(n-2)
+    end
+end
+
+println(fib(10))
