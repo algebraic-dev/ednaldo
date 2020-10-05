@@ -1,7 +1,7 @@
 const { NotFinishedStringError, UnrecognizedError } = require('../errors.js');
 
 const {
-  isDigit, isValidIdentifierCharacter, isValidStartOfIdentifierCharacter, checkIdType, isUseless
+  isDigit, isValidIdentifierCharacter, isValidStartOfIdentifierCharacter, checkIdType, isUseless,
 } = require('./validation.js');
 
 /**

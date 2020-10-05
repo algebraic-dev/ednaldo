@@ -89,7 +89,7 @@ class Interpreter {
 
     this.callStack.push(new CallFrame());
     for (let i = 0; i < func.args.length; i += 1) {
-      this.declVar(func.args[i], 'Number', args[i]);
+      this.declVar(func.args[i], args[i].type, args[i].value);
     }
     let val = null;
     for (let i = 0; i < func.compound.code.length; i += 1) {
