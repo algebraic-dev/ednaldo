@@ -44,12 +44,13 @@ class Interpreter {
   }
 
   visitVarDecl(node) {
-    this.declVar(node.name, 'Number', this.visit(node.value));
+    const val = this.visit(node.value);
+    this.declVar(node.name, val.type, val.value);
     return null;
   }
 
   visitVarSet(node) {
-    this.setVar(node.name, 'Number', this.visit(node.value));
+    this.setVar(node.name, this.visit(node.value));
     return null;
   }
 
@@ -77,7 +78,7 @@ class Interpreter {
     if (value === undefined || value === null) {
       throw new NotFoundFunctionError(`Função ${name} não encontrada!`);
     }
-    if (value.type !== 'Function') {
+    if (value.type !== 'FunctionDecl') {
       throw new NotAFunctionError(value);
     }
     const func = value.value;
@@ -104,7 +105,7 @@ class Interpreter {
     if (value === undefined || value === null) {
       throw new NotFoundVarError(node.value, node.pos);
     }
-    return value.value;
+    return value;
   }
 
   visitProgram(node) {
@@ -127,7 +128,7 @@ class Interpreter {
   }
 
   visitFunction(node) {
-    this.declVar(node.name, 'Function', node);
+    this.declVar(node.name, 'FunctionDecl', node);
     return { type: 'Nil', value: 'Nil' };
   }
 

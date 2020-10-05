@@ -46,4 +46,10 @@ module.exports = {
       }
     },
   },
+  registerNode: {
+    run(machine, ...args) {
+      if (args.length !== 2) throw new IncorrectArgNumberError(2, args.length, 'registerNode');
+      return { type: 'String', value: args[0].value.toString() };
+    },
+  },
 };
