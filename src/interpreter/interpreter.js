@@ -1,6 +1,6 @@
 const CallFrame = require('./callframe.js');
 const builtIn = require('./builtin.js');
-const { valToNumber, valToBool } = require('./utils.js');
+const { valToNumber, valToBool, checkType } = require('./utils.js');
 const StandardIO = require('./standardio.js');
 
 // Classes de erros
@@ -177,6 +177,13 @@ class Interpreter {
     }
   }
 
+  visitAccess(node) {
+    const arr = this.visit(node.name);
+    checkType(arr, '[]', 'Array');
+    const index = checkType(this.visit(node.value), '[]', 'Number').value;
+    return arr.value[index] !== undefined ? arr.value[index] : { type: 'Nil' };
+  }
+
   visit(node) {
     switch (node.type) {
       case 'Compound': return this.visitCompound(node);
@@ -207,6 +214,7 @@ class Interpreter {
       case 'Nil': return node;
       case 'Unary': return this.visitUnary(node);
       case 'Array': return { type: 'Array', value: node.values.map((a) => this.visit(a)) };
+      case 'Access': return this.visitAccess(node);
       default:
         throw new NotImplementedError(node);
     }

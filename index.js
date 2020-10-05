@@ -1,3 +1,4 @@
+/* eslint-disable no-continue */
 /* eslint-disable no-restricted-syntax */
 const fs = require('fs');
 const readline = require('readline');
@@ -5,6 +6,7 @@ const util = require('util');
 const Lexer = require('./src/front/lexer.js');
 const Parser = require('./src/front/parser.js');
 const Machine = require('./src/interpreter/interpreter.js');
+const { SyntaxError } = require('./src/errors.js');
 
 function executeFile(file) {
   let code;
@@ -41,19 +43,34 @@ async function repl() {
 
   rl.prompt();
 
+  let join = '';
+  let joining = false;
+
   for await (const line of rl) {
     if (line.trim() === ':quit') {
       rl.close();
       return;
     }
-    const lexer = new Lexer(line.trim());
+    const lexer = new Lexer(joining ? join + line.trim() : line.trim());
     const parser = new Parser(lexer);
     try {
       const val = machine.run(parser.parse());
       if (val !== null) {
+        join = '';
+        joining = false;
         machine.builtIn.println.run(machine, val);
       }
     } catch (err) {
+      if (err instanceof SyntaxError) {
+        if (err.got === 'EOF') {
+          process.stdout.write('.. ');
+          joining = true;
+          join += `${line}\n`;
+          continue;
+        }
+      }
+      join = '';
+      joining = false;
       process.stdout.write(`${util.inspect(err, false, 3, true)}\n`);
     }
 

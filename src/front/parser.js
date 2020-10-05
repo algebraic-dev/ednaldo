@@ -41,6 +41,14 @@ class Parser {
       this.eat(')');
       return { type: 'Call', name: name.value, args };
     }
+
+    if (this.actual.type === '[') {
+      this.eat('[');
+      const value = this.parseValues();
+      this.eat(']');
+      return { type: 'Access', name, value };
+    }
+
     return name;
   }
 
