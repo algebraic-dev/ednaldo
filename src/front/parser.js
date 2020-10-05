@@ -31,8 +31,9 @@ class Parser {
       this.eat('(');
       const args = [];
       while (this.actual.type !== ')' && this.actual.type !== 'EOF') {
-        args.push(this.expr());
+        args.push(this.logicalOperators());
         if (this.actual.type === ',') {
+          
           this.eat(',')
         } else {
           break
