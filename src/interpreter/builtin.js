@@ -7,7 +7,7 @@ function formatInterpreterType(node) {
     case 'Number':
       return `\x1b[34m${node.value}\x1b[0m`;
     case 'Array': {
-      const values = node.values.map((val) => formatInterpreterType(val)).join(' ');
+      const values = node.value.map((val) => formatInterpreterType(val)).join(' ');
       return `[ ${values} ]`;
     }
     case 'Bool':

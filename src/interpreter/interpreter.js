@@ -206,7 +206,7 @@ class Interpreter {
       case '!=': return { type: 'Bool', value: !this.visitEqual(node).value };
       case 'Nil': return node;
       case 'Unary': return this.visitUnary(node);
-      case 'Array': return { type: 'Array', values: node.values.map((a) => this.visit(a)) };
+      case 'Array': return { type: 'Array', value: node.values.map((a) => this.visit(a)) };
       default:
         throw new NotImplementedError(node);
     }
