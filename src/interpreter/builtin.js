@@ -6,17 +6,14 @@ function formatInterpreterType(node) {
       return node.value;
     case 'Number':
       return `\x1b[34m${node.value}\x1b[0m`;
-    case 'Array': {
-      const values = node.value.map((val) => formatInterpreterType(val)).join(' ');
-      return `[ ${values} ]`;
-    }
+    case 'Array':
+      return `[ ${node.value.map((val) => formatInterpreterType(val)).join(' ')} ]`;
     case 'Bool':
-      if (node.value) {
-        return '\x1b[32mTrue\x1b[0m';
-      }
-      return '\x1b[31mFalse\x1b[0m';
+      return node.value ? '\x1b[32mTrue\x1b[0m' : '\x1b[31mFalse\x1b[0m';
     case 'Nil':
       return 'Nil';
+    case 'FunctionDecl':
+      return `\x1b[2m\x1b[36m<Fn: ${node.value.name}>\x1b[0m`;
     default:
       return `<Not Recognized = ${node.type}>`;
   }
