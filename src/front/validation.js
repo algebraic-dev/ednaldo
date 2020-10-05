@@ -29,5 +29,5 @@ function checkIdType(value) {
 }
 
 module.exports = {
-  isDigit, isValidIdentifierCharacter, isValidStartOfIdentifierCharacter, checkIdType,
+  isDigit, isValidIdentifierCharacter, isValidStartOfIdentifierCharacter, checkIdType, isUseless,
 };
