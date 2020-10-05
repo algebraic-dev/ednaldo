@@ -30,6 +30,20 @@ module.exports = {
         machine.io.stdout.write(`${formatInterpreterType(args[i])} `);
       }
       machine.io.stdout.write('\n');
+      return { type: 'Nil' };
+    },
+  },
+  string: {
+    run(machine, ...args) {
+      if (args.length !== 1) throw new IncorrectArgNumberError(1, args.length, 'string');
+      switch (args[0].type) {
+        case 'String': return args[0];
+        case 'Number': return { type: 'String', value: args[0].value.toString() };
+        case 'Bool': return { type: 'String', value: args[0].value ? 'True' : 'False' };
+        case 'Array': return { type: 'String', value: '[Array]' };
+        default:
+          return { type: 'Nil' };
+      }
     },
   },
 };
