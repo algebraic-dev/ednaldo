@@ -7,4 +7,29 @@
 Essa linguagem é feita para programação de editores de video para os video clipes do Ednaldo Pereira.
 
 ## :heavy_check_mark: Para fazer:
-- [x] Lang
+- [ ] Compilar pra bytecode
+- [ ] Maps
+- [ ] Tipagem 
+- [ ] Modules
+
+## :thumbsup: Como usar?
+Para utilizar o REPL use somente ``node .``. Caso queira utilizar em um arquivo utilize ``node . arquivo``
+todas estruturas disponiveis:
+
+```elixir
+val a = 1
+val b = [ 1 2 3 ]
+val c = "portugues"
+
+fn main do
+  if a < 2 do
+    println("oi")
+  else
+    println("oi" + string(123))
+  end
+end
+
+fn fib(n) do
+  2
+end
+```
