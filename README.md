@@ -14,8 +14,8 @@ Essa linguagem é feita para programação de editores de video para os video cl
 
 ## :thumbsup: Como usar?
 Para utilizar o REPL use somente ``node .``. Caso queira utilizar em um arquivo utilize ``node . arquivo``
-todas estruturas disponiveis:
 
+##### Todas as estruturas existentes até agora:
 ```elixir
 val a = 1
 val b = [ 1 2 3 ]
