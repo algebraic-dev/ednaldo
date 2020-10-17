@@ -210,6 +210,19 @@ class Parser {
     };
   }
 
+  parseFor(){
+    this.eat("For");
+    const name = this.eat('Identifier').value;
+    this.eat("In");
+
+    const start = this.parseValues();
+    this.eat("..");
+    const end = this.parseValues();
+
+    const compound = this.parseCompound();  
+    return {type: "For", name, condition: {type: "Range", start, end}, compound}
+  }
+
   parseFn() {
     this.eat('Fn');
     const name = this.eat('Identifier').value;
@@ -239,6 +252,8 @@ class Parser {
         return this.parseVariableDeclaration();
       case 'If':
         return this.parseIf();
+      case 'For':
+        return this.parseFor();
       case '{':
         return this.parseCompound();
       default: {

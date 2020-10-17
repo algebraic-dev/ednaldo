@@ -53,7 +53,6 @@ class Lexer {
       case ')':
       case '{':
       case '}':
-      case '.':
       case ',':
       case '[':
       case ']':
@@ -63,6 +62,8 @@ class Lexer {
           value: this.input[this.pos - 1],
           pos: this.relPos,
         };
+      case '.':
+        return this.doubleChar('.', '.', '..');
       case '-':
         return this.doubleChar('-', '>', '->');
       case '<':

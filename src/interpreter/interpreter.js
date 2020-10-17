@@ -128,6 +128,22 @@ class Interpreter {
     return { type: 'Nil', value: 'Nil' };
   }
 
+  
+  visitFor(node) {
+    this.declVar(node.name, 'Number', this.visit(node.condition.start).value)
+    let end =  this.visit(node.condition.end).value;
+    let inc = this.visit(node.condition.start).value >= end;
+
+    while(this.findVar(node.name).value != end){  
+      let last = this.findVar(node.name).value;
+      this.visit(node.compound);
+      this.setVar(node.name, 'Number',last + (inc ? -1 : 1))
+
+    }
+
+    return { type: 'Nil', value: 'Nil' };
+  }
+
   visitFunction(node) {
     this.declVar(node.name, 'FunctionDecl', node);
     return { type: 'Nil', value: 'Nil' };
@@ -190,6 +206,7 @@ class Interpreter {
       case 'Compound': return this.visitCompound(node);
       case 'Call': return this.visitCall(node);
       case 'Identifier': return this.visitId(node);
+      case 'For': return this.visitFor(node);
       case 'Program': return this.visitProgram(node);
       case 'VarSet': return this.visitVarSet(node);
       case 'VarDecl': return this.visitVarDecl(node);
