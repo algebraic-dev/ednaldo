@@ -12,7 +12,7 @@ function formatInterpreterType(node) {
       return `[ ${node.value.map((val) => formatInterpreterType(val)).join(' ')} ]`;
     case 'Bool':
       return node.value ? '\x1b[32mTrue\x1b[0m' : '\x1b[31mFalse\x1b[0m';
-    case 'Nil':
+    case 'Nil': 
       return '\u001b[38;5;240mNil\x1b[0m';
     case 'FunctionDecl':
       return `\x1b[2m\x1b[36m<Fn: ${node.value.name}>\x1b[0m`;

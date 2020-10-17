@@ -32,4 +32,9 @@ end
 fn fib(n) do
   2
 end
+
+for i in 0..10 do
+  println("oi", i)
+end
+
 ```
