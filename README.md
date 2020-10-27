@@ -23,9 +23,9 @@ val c = "portugues"
 
 fn main do
   if a < 2 do
-    println("oi")
+    printEdvaldo("oi")
   else
-    println("oi" + string(123))
+    printEdvaldo("oi" + string(123))
   end
 end
 
@@ -34,7 +34,7 @@ fn fib(n) do
 end
 
 for i in 0..10 do
-  println("oi", i)
+  printEdvaldo("oi", i)
 end
 
 ```
