@@ -48,6 +48,7 @@ async function repl() {
 
   for await (const line of rl) {
     if (line.trim() === ':quit') {
+      process.stdout.write(`\x1b[1m\x1b[41mJogue somente para ganhar, e não para perder\x1b[0m: O erro aqui foi voce ter saido do ednaldo... \n`);
       rl.close();
       return;
     }
