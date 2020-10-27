@@ -72,7 +72,11 @@ async function repl() {
       }
       join = '';
       joining = false;
-      process.stdout.write(`\x1b[1m\x1b[41mJogue somente para ganhar, e não para perder:\x1b[0m ${util.inspect(err, false, 3, true)}\n\x1b[0m`);
+      if(Math.random() > 0.2){  
+        process.stdout.write(`\x1b[1m\x1b[41mJogue somente para ganhar, e não para perder:\x1b[0m ${util.inspect(err, false, 3, true)}\n\x1b[0m`);
+      } else{
+        process.stdout.write("Se eu te contar voce não acredita....\n");
+      }
     }
 
     rl.prompt();
