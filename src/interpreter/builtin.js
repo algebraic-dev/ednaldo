@@ -34,7 +34,7 @@ function formatInterpreterType(node) {
 }
 
 module.exports = {
-  printEdvaldo: {
+  printEdnaldo: {
     run(machine, ...args) {
       if (args.length < 1) throw new IncorrectArgNumberError(1, args.length, 'printOrTrick');
       if(Math.random() > 0.5){

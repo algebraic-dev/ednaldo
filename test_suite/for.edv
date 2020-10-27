@@ -1,3 +1,3 @@
 for i in 0..10 do 
-    printEdvaldo("atapo", i)
+    printEdnaldo("atapo", i)
 end
