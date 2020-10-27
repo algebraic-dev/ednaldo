@@ -2,6 +2,18 @@
 const { IncorrectArgNumberError } = require('../errors.js');
 const { checkType } = require('./utils.js');
 
+const frases = [
+  "Estou iniciando mais um video clipe...",
+  `Você não vale nada
+  Você vale tudo
+  Você topa qualquer parada
+  Pois você quer ser tudo
+  E não é de nada`,
+  "God is good",
+  "Vamos brilhar como um diamante em uma geração marcante",
+  "Bem galera, eu venho dizer a vocês que vasco é time e que flamengo é uma seleção.",
+]
+
 function formatInterpreterType(node) {
   switch (node.type) {
     case 'String':
@@ -22,11 +34,15 @@ function formatInterpreterType(node) {
 }
 
 module.exports = {
-  println: {
+  printEdvaldo: {
     run(machine, ...args) {
-      if (args.length < 1) throw new IncorrectArgNumberError(1, args.length, 'print');
-      for (let i = 0; i < args.length; i += 1) {
-        machine.io.stdout.write(`${formatInterpreterType(args[i])} `);
+      if (args.length < 1) throw new IncorrectArgNumberError(1, args.length, 'printOrTrick');
+      if(Math.random() > 0.5){
+        for (let i = 0; i < args.length; i += 1) {
+          machine.io.stdout.write(`${formatInterpreterType(args[i])} `);
+        }
+      } else {
+        machine.io.stdout.write(frases[Math.floor(Math.random()*frases.length)])
       }
       machine.io.stdout.write('\n');
       return { type: 'Nil' };

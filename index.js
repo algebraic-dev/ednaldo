@@ -58,7 +58,7 @@ async function repl() {
       if (val !== null) {
         join = '';
         joining = false;
-        machine.builtIn.println.run(machine, val);
+        machine.builtIn.printEdvaldo.run(machine, val);
       }
     } catch (err) {
       if (err instanceof SyntaxError) {
@@ -71,7 +71,7 @@ async function repl() {
       }
       join = '';
       joining = false;
-      process.stdout.write(`${util.inspect(err, false, 3, true)}\n`);
+      process.stdout.write(`\x1b[1m\x1b[41mJogue somente para ganhar, e não para perder:\x1b[0m ${util.inspect(err, false, 3, true)}\n\x1b[0m`);
     }
 
     rl.prompt();
