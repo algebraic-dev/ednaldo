@@ -58,7 +58,7 @@ async function repl() {
       if (val !== null) {
         join = '';
         joining = false;
-        machine.builtIn.printEdvaldo.run(machine, val);
+        machine.builtIn.printEdnaldo.run(machine, val);
       }
     } catch (err) {
       if (err instanceof SyntaxError) {

@@ -6,4 +6,4 @@ fn fib(n) do
     end
 end
 
-printEdvaldo("O resultado do fib é " + string(fib(10)))
+printEdnaldo("O resultado do fib é " + string(fib(10)))
