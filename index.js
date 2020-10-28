@@ -53,7 +53,6 @@ async function repl() {
       return;
     }else if(line.trim() === ":help") {
       process.stdout.write("\nDocumentação oficial:\nhttps://www.letras.mus.br/ednaldo-pereira/1775281/\n\n");
-      return;
     }
     const lexer = new Lexer(joining ? join + line.trim() : line.trim());
     const parser = new Parser(lexer);
