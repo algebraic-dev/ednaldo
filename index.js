@@ -51,6 +51,9 @@ async function repl() {
       process.stdout.write(`\x1b[1m\x1b[41mJogue somente para ganhar, e não para perder\x1b[0m: O erro aqui foi voce ter saido do ednaldo... \n`);
       rl.close();
       return;
+    }else if(line.trim() === ":help") {
+      process.stdout.write("\nDocumentação oficial:\nhttps://www.letras.mus.br/ednaldo-pereira/1775281/\n\n");
+      return;
     }
     const lexer = new Lexer(joining ? join + line.trim() : line.trim());
     const parser = new Parser(lexer);
