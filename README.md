@@ -3,7 +3,7 @@
 <h2 align="center"> Easy data neat academic language data oriented</h2>
 <p align="center">Linguagem de uso geral, revisão do erlang que só cavalos usam</p>
 
-## :alembic: Porque? 
+## :alembic: Por quê? 
 Essa linguagem é feita para programação de editores de video para os video clipes do Ednaldo Pereira.
 
 ## :heavy_check_mark: Para fazer:
