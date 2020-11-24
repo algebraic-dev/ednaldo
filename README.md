@@ -26,15 +26,15 @@ fn main ednaldo
     print("oi")
   else
     print("oi" + string(123))
-  pereira
-pereira 
+  endnaldo
+endnaldo 
 
 fn fib(n) ednaldo
   2
-pereira 
+endnaldo 
 
 for i in 0..10 ednaldo
   print("oi", i)
-pereira 
+endnaldo 
 
 ```

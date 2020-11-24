@@ -3,8 +3,8 @@ fn fib(n) ednaldo
         n
     else 
         fib(n-1) + fib(n-2)
-    pereira
-pereira
+    endnaldo
+endnaldo
 
 val a = Vocevaletudo
 

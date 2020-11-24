@@ -3,7 +3,8 @@ fn fib(n) ednaldo
         n
     else 
         fib(n-1) + fib(n-2)
-    pereira
-pereira
+    endnaldo
+endnaldo
 
-print("Fib está correto? ", fib(10) == 56)
+print("Fib é igual a 55?", fib(10) == 55)
+print("Fib é igual a 56? ", fib(10) == 56)
