@@ -40,7 +40,7 @@ async function repl() {
 
   const machine = new Machine();
 
-  process.stdout.write("Repl de Ednaldo use ':quit' to quit!\n\n");
+  process.stdout.write("Repl de Ednaldo use ':quit' to quit ou :help para AJUDA!\n\n");
 
   rl.prompt();
 
