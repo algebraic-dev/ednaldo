@@ -76,10 +76,10 @@ class Parser {
         this.eat(']');
         return { type: 'Array', values };
       }
-      case 'True':
+      case 'Vocevaletudo':
         this.advance();
         return { type: 'Bool', value: true };
-      case 'False':
+      case 'Vocevalenada':
         this.advance();
         return { type: 'Bool', value: false };
       case 'Nil':
@@ -166,12 +166,12 @@ class Parser {
   }
 
   parseCompound() {
-    this.eat('Do');
+    this.eat('Ednaldo');
     const code = [];
-    while (this.actual.type !== 'End' && this.actual.type !== 'EOF') {
+    while (this.actual.type !== 'Pereira' && this.actual.type !== 'EOF') {
       code.push(this.statement());
     }
-    this.eat('End');
+    this.eat('Pereira');
     return { type: 'Compound', code };
   }
 
@@ -186,8 +186,8 @@ class Parser {
   parseIf() {
     this.eat('If');
     const condition = this.logicalOperators();
-    this.eat('Do');
-    const compound = this.parseUnrestrictedCompound(['End', 'Else', 'Elif']);
+    this.eat('Ednaldo');
+    const compound = this.parseUnrestrictedCompound(['Pereira', 'Else', 'Elif']);
     const elseifs = [];
     let elseCompound;
 
@@ -200,10 +200,10 @@ class Parser {
 
     if (this.actual.type === 'Else') {
       this.eat('Else');
-      elseCompound = this.parseUnrestrictedCompound(['End']);
+      elseCompound = this.parseUnrestrictedCompound(['Pereira']);
     }
 
-    this.eat('End');
+    this.eat('Pereira');
 
     return {
       type: 'If', condition, compound, elseifs, elseCompound,

@@ -23,7 +23,7 @@ function formatInterpreterType(node) {
     case 'Array':
       return `[ ${node.value.map((val) => formatInterpreterType(val)).join(' ')} ]`;
     case 'Bool':
-      return node.value ? '\x1b[32mTrue\x1b[0m' : '\x1b[31mFalse\x1b[0m';
+      return node.value ? '\x1b[32mVoce vale tudo\x1b[0m' : '\x1b[31mVoce vale nada\x1b[0m';
     case 'Nil': 
       return '\u001b[38;5;240mNil\x1b[0m';
     case 'FunctionDecl':
@@ -34,15 +34,11 @@ function formatInterpreterType(node) {
 }
 
 module.exports = {
-  printEdnaldo: {
+  print: {
     run(machine, ...args) {
       if (args.length < 1) throw new IncorrectArgNumberError(1, args.length, 'printOrTrick');
-      if(Math.random() > 0.5){
-        for (let i = 0; i < args.length; i += 1) {
-          machine.io.stdout.write(`${formatInterpreterType(args[i])} `);
-        }
-      } else {
-        machine.io.stdout.write(frases[Math.floor(Math.random()*frases.length)])
+      for (let i = 0; i < args.length; i += 1) {
+        machine.io.stdout.write(`${formatInterpreterType(args[i])} `);
       }
       machine.io.stdout.write('\n');
       return { type: 'Nil' };
@@ -54,7 +50,7 @@ module.exports = {
       switch (args[0].type) {
         case 'String': return args[0];
         case 'Number': return { type: 'String', value: args[0].value.toString() };
-        case 'Bool': return { type: 'String', value: args[0].value ? 'True' : 'False' };
+        case 'Bool': return { type: 'String', value: args[0].value ? 'Voce vale tudo' : 'Voce vale nada' };
         case 'Array': return { type: 'String', value: '[Array]' };
         default:
           return { type: 'Nil' };

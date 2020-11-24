@@ -21,20 +21,20 @@ val a = 1
 val b = [ 1 2 3 ]
 val c = "portugues"
 
-fn main do
-  if a < 2 do
-    printEdnaldo("oi")
+fn main ednaldo
+  if a < 2 ednaldo
+    print("oi")
   else
-    printEdnaldo("oi" + string(123))
-  end
-end
+    print("oi" + string(123))
+  pereira
+pereira 
 
-fn fib(n) do
+fn fib(n) ednaldo
   2
-end
+pereira 
 
-for i in 0..10 do
-  printEdnaldo("oi", i)
-end
+for i in 0..10 ednaldo
+  print("oi", i)
+pereira 
 
 ```

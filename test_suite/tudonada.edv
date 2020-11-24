@@ -6,6 +6,4 @@ fn fib(n) ednaldo
     pereira
 pereira
 
-val a = Vocevaletudo
-
-print("O resultado do fib é", fib(10))
+print("Fib está correto? ", fib(10) == 56)
