@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /* eslint-disable no-continue */
 /* eslint-disable no-restricted-syntax */
 const fs = require('fs');
@@ -61,7 +62,7 @@ async function repl() {
       if (val !== null) {
         join = '';
         joining = false;
-        machine.builtIn.printEdnaldo.run(machine, val);
+        machine.builtIn.print.run(machine, val);
       }
     } catch (err) {
       if (err instanceof SyntaxError) {
