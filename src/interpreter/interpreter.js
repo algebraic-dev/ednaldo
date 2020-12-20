@@ -214,7 +214,7 @@ class Interpreter {
       case 'If': return this.visitIf(node);
       case 'Bool':
       case 'String': return node;
-      case 'Number': return { type: 'Number', value: parseInt(node.value, 10) };
+      case 'Number': return { type: 'Number', value: BigInt(node.value, 10) };
       case '+': return this.visitOpSum(node);
       case '-': return this.visitBinaryMathOperation(node, (x, y) => x.value - y.value, '-');
       case '*': return this.visitBinaryMathOperation(node, (x, y) => x.value * y.value, '*');
