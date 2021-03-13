@@ -56,6 +56,10 @@ async function repl() {
       process.stdout.write("\nDocumentação oficial:\nhttps://www.letras.mus.br/ednaldo-pereira/1775281/\n\n");
       rl.prompt();
       continue
+    } else if(line.trim().startsWith(":")) {
+      process.stdout.write("\nComando não encontrado\n\n");
+      rl.prompt();
+      continue;
     }
     const lexer = new Lexer(joining ? join + line.trim() : line.trim());
     const parser = new Parser(lexer);
