@@ -210,17 +210,22 @@ class Parser {
     };
   }
 
-  parseFor(){
-    this.eat("For");
+  parseFor() {
+    this.eat('For');
     const name = this.eat('Identifier').value;
-    this.eat("In");
+    this.eat('In');
 
     const start = this.parseValues();
-    this.eat("..");
+    this.eat('..');
     const end = this.parseValues();
 
-    const compound = this.parseCompound();  
-    return {type: "For", name, condition: {type: "Range", start, end}, compound}
+    const compound = this.parseCompound();
+    return {
+      type: 'For',
+      name,
+      condition: { type: 'Range', start, end },
+      compound,
+    };
   }
 
   parseFn() {

@@ -1,4 +1,4 @@
-const KEYWORDS = ['val', 'fn', 'if', 'else', 'const', 'and', 'or', 'elif', 'ednaldo', 'endnaldo', 'Vocevaletudo', 'Vocevalenada', 'Nil', "for","in"];
+const KEYWORDS = ['val', 'fn', 'if', 'else', 'const', 'and', 'or', 'elif', 'ednaldo', 'endnaldo', 'Vocevaletudo', 'Vocevalenada', 'Nil', 'for', 'in'];
 
 // As funções abaixo são uteis para a validação de chars e
 // strings que vão ser utilizadas pelo lexer para criar os

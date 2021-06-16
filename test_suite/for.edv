@@ -1,0 +1,5 @@
+for i in 0..10 ednaldo
+  print(i*2)
+endnaldo
+
+print("End")

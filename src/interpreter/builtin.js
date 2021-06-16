@@ -2,18 +2,6 @@
 const { IncorrectArgNumberError } = require('../errors.js');
 const { checkType } = require('./utils.js');
 
-const frases = [
-  "Estou iniciando mais um video clipe...",
-  `Você não vale nada
-  Você vale tudo
-  Você topa qualquer parada
-  Pois você quer ser tudo
-  E não é de nada`,
-  "God is good",
-  "Vamos brilhar como um diamante em uma geração marcante",
-  "Bem galera, eu venho dizer a vocês que vasco é time e que flamengo é uma seleção.",
-]
-
 function formatInterpreterType(node) {
   switch (node.type) {
     case 'String':
@@ -24,7 +12,7 @@ function formatInterpreterType(node) {
       return `[ ${node.value.map((val) => formatInterpreterType(val)).join(' ')} ]`;
     case 'Bool':
       return node.value ? '\x1b[32mVoce vale tudo\x1b[0m' : '\x1b[31mVoce vale nada\x1b[0m';
-    case 'Nil': 
+    case 'Nil':
       return '\u001b[38;5;240mNil\x1b[0m';
     case 'FunctionDecl':
       return `\x1b[2m\x1b[36m<Fn: ${node.value.name}>\x1b[0m`;
@@ -45,7 +33,7 @@ module.exports = {
     },
   },
   string: {
-    run(machine, ...args) {
+    run(_machine, ...args) {
       if (args.length !== 1) throw new IncorrectArgNumberError(1, args.length, 'string');
       switch (args[0].type) {
         case 'String': return args[0];
@@ -58,14 +46,14 @@ module.exports = {
     },
   },
   append: {
-    run(machine, ...args) {
+    run(_machine, ...args) {
       if (args.length !== 2) throw new IncorrectArgNumberError(2, args.length, 'append');
       checkType(args[0], 'append', 'Array');
       return { type: 'Array', value: args[0].value.concat(args[1]) };
     },
   },
   len: {
-    run(machine, ...args) {
+    run(_machine, ...args) {
       if (args.length !== 1) throw new IncorrectArgNumberError(2, args.length, 'len');
       return { type: 'Number', value: args[0].value ? (args[0].value.length ? args[0].value.length : 0) : 0 };
     },

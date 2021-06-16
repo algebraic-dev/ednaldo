@@ -1,13 +1,17 @@
 const { NotFinishedStringError, UnrecognizedError } = require('../errors.js');
 
 const {
-  isDigit, isValidIdentifierCharacter, isValidStartOfIdentifierCharacter, checkIdType, isUseless,
+  isDigit,
+  isValidIdentifierCharacter,
+  isValidStartOfIdentifierCharacter,
+  checkIdType,
+  isUseless,
 } = require('./validation.js');
 
 /**
  * Essa classe é o inicio da interpretação, ela irá pegar o código fonte
  * e transformar em um stream de tokens/lexemas que são as unidades basicas
- * que classificam cada "palavra" e simbolo do código fonte em um tipo unico
+ * que classificam cada 'palavra' e simbolo do código fonte em um tipo unico
  */
 
 class Lexer {
@@ -35,7 +39,10 @@ class Lexer {
 
     // Remove os characters considerados inuteis
     if (isUseless(this.input[this.pos])) {
-      while (isUseless(this.input[this.pos]) && this.input[this.pos] !== undefined) {
+      while (
+        isUseless(this.input[this.pos])
+        && this.input[this.pos] !== undefined
+      ) {
         if (this.input[this.pos] === '\n') {
           this.relPos.line += 1;
         }
@@ -79,17 +86,21 @@ class Lexer {
     }
 
     // Checa por strings que começam somente com aspas duplas
-    if (this.input[this.pos] === '"') {
+    if (this.input[this.pos] === '\'') {
       const start = this.pos;
       this.pos += 1;
-      while (this.input[this.pos] !== '"' && this.input[this.pos]) {
+      while (this.input[this.pos] !== '\'' && this.input[this.pos]) {
         this.pos += 1;
       }
       if (this.input[this.pos] === undefined) {
         throw new NotFinishedStringError(this.relPos);
       }
       this.pos += 1;
-      return { type: 'String', value: this.input.substring(start + 1, this.pos - 1), pos: this.relPos };
+      return {
+        type: 'String',
+        value: this.input.substring(start + 1, this.pos - 1),
+        pos: this.relPos,
+      };
     }
 
     // Checa se há um numero valido (floats não são considerados numeros válidos por enquanto)
@@ -98,7 +109,11 @@ class Lexer {
       while (isDigit(this.input[this.pos])) {
         this.pos += 1;
       }
-      return { type: 'Number', value: this.input.substring(start, this.pos), pos: this.relPos };
+      return {
+        type: 'Number',
+        value: this.input.substring(start, this.pos),
+        pos: this.relPos,
+      };
     }
 
     // Checa se é um identificador valido, junta os chars e então retorna.
